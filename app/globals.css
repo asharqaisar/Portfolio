@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Ashar Qaisar — portfolio
+
+   Palette taken from the 21st.dev theme "Portfolio Pro Dark"
+   (https://21st.dev/community/themes/portfolio-pro-dark-1786881610971),
+   dark half. Two values in the source theme were junk and are deliberately
+   ignored: `--shadow-color: #ff0000` and `--letter-spacing: 0.28em`.
+
+   void (ground #020617) · chalk (type #f8fafc) · lime (single accent #aef33f)
+   --------------------------------------------------------------------------- */
+
+@theme {
+  --color-void: #020617;
+  --color-void-2: #0f172a;
+  --color-void-3: #1e293b;
+  --color-chalk: #f8fafc;
+  --color-mute: #94a3b8;
+  --color-lime: #aef33f;
+  --color-lime-deep: #16532e;
+  --color-on-lime: #000000;
+
+  --radius-card: 1.25rem;
+  --radius-frame: 2rem;
+
+  --font-display: var(--font-instrument), ui-serif, Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, 'SFMono-Regular', monospace;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-chalk);
+    overflow-x: hidden;
+    font-synthesis-weight: none;
+  }
+
+  /* Browser surfaces belong to the design, not to the browser. */
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-on-lime);
+  }
+
+  body {
+    caret-color: var(--color-lime);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-void-3);
+    border-radius: 999px;
+    border: 3px solid var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-lime);
+  }
+}
+
+@layer utilities {
+  .hairline {
+    border-color: color-mix(in oklab, var(--color-chalk) 11%, transparent);
+  }
+
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .mask-fade-r {
+    mask-image: linear-gradient(to right, #000 45%, transparent 100%);
+  }
+
+  .text-edge {
+    text-wrap: balance;
+  }
+
+  .animate-rise {
+    animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Hero entrance: words resolve out of blur, staggered by inline delay. */
+  .animate-blur-in {
+    animation: blur-in 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-pop {
+    animation: pop 1.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(14px);
+    transform: translateY(0.85rem);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes scrollcue {
+  0% {
+    transform: translateY(-110%);
+  }
+  60%,
+  100% {
+    transform: translateY(320%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
