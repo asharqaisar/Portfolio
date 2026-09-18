@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
 import { Gyroscope } from './scene/Gyroscope';
@@ -76,6 +76,10 @@ export function HeroScene() {
   const wrap = useRef<HTMLDivElement>(null);
   const supported = useSyncExternalStore(subscribeToNothing, getWebglSupport, assumeSupported);
   const [visible, setVisible] = useState(true);
+  // Held at opacity 0 until the portrait texture is decoded, so the scene
+  // fades in whole instead of flashing rings over the photo beneath it.
+  const [textureReady, setTextureReady] = useState(false);
+  const handleTextureReady = useCallback(() => setTextureReady(true), []);
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
   const compact = useMediaQuery('(max-width: 639px)');
 
@@ -100,7 +104,13 @@ export function HeroScene() {
   }
 
   return (
-    <div ref={wrap} aria-hidden className="pointer-events-none absolute inset-0">
+    <div
+      ref={wrap}
+      aria-hidden
+      className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ease-out ${
+        textureReady ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
       {supported && (
         <Canvas
           dpr={compact ? [1, 1.5] : [1, 1.75]}
@@ -108,7 +118,12 @@ export function HeroScene() {
           camera={{ position: [0, 0, 5.6], fov: 34 }}
           gl={{ alpha: true, antialias: !compact, powerPreference: 'high-performance' }}
         >
-          <Gyroscope paused={!visible} reduced={reduced} compact={compact} />
+          <Gyroscope
+            paused={!visible}
+            reduced={reduced}
+            compact={compact}
+            onTextureReady={handleTextureReady}
+          />
 
           {/* Local lightformers only — no HDR fetch, no network cost. */}
           <Environment resolution={compact ? 64 : 128} frames={1}>

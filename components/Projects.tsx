@@ -12,7 +12,7 @@ const projects = [
     host: 'asharfolio.vercel.app',
     blurb:
       'Autonomous agent frameworks and LLM inference endpoints serving local models through Ollama and Open WebUI, with the deployment portfolio around them.',
-    plate: 'agents',
+    image: '/projects/agent-framework.jpg',
   },
   {
     index: '02',
@@ -23,7 +23,7 @@ const projects = [
     host: 'Python · Full-stack',
     blurb:
       'An OSINT dashboard built end to end: Python data processing on the back, a full-stack interface on the front, designed for investigating rather than admiring.',
-    plate: 'spectr',
+    image: '/projects/spectr.jpg',
   },
   {
     index: '03',
@@ -34,25 +34,11 @@ const projects = [
     host: 'kikuplayer.netlify.app',
     blurb:
       'A browser-based music player designed and built from scratch, including the end-to-end deployment pipeline that keeps it on Netlify.',
-    plate: 'kiku',
+    // No image on purpose: the work is real, but there is no honest picture of
+    // it to hand, and generated art would misrepresent it.
   },
 ];
 
-const plates: Record<string, React.CSSProperties> = {
-  agents: {
-    background:
-      'radial-gradient(58% 58% at 50% 38%, rgba(174,243,63,0.55) 0%, rgba(174,243,63,0.12) 45%, transparent 72%), repeating-linear-gradient(180deg, rgba(248,250,252,0.10) 0 1px, transparent 1px 7px), #020617',
-  },
-  spectr: {
-    background:
-      'repeating-linear-gradient(90deg, rgba(174,243,63,0.55) 0 2px, transparent 2px 10px), linear-gradient(180deg, #aef33f 0%, transparent 65%), #020617',
-    maskImage: 'linear-gradient(180deg, #000 30%, transparent 92%)',
-  },
-  kiku: {
-    background:
-      'radial-gradient(42% 26% at 50% 74%, rgba(207,247,140,0.85) 0%, rgba(174,243,63,0.15) 55%, transparent 75%), repeating-linear-gradient(90deg, rgba(248,250,252,0.12) 0 1px, transparent 1px 26px), linear-gradient(180deg, #020617 0%, #0f172a 100%)',
-  },
-};
 
 export function Projects() {
   const [active, setActive] = useState<number | null>(null);
@@ -141,13 +127,8 @@ export function Projects() {
                   </span>
                 </Row>
 
-                <div className="flex items-start gap-6 pb-8 md:pb-10 md:pl-[3.4rem]">
-                  <div
-                    aria-hidden
-                    className="mt-1 h-10 w-10 shrink-0 lg:hidden"
-                    style={plates[project.plate]}
-                  />
-                  <div>
+                <div className="flex flex-col gap-6 pb-8 md:flex-row md:items-start md:gap-10 md:pb-10 md:pl-[3.4rem]">
+                  <div className="order-2 flex-1 md:order-1">
                     <p className="max-w-[54ch] text-[15px] leading-[1.65] text-mute">
                       {project.blurb}
                     </p>
@@ -155,6 +136,19 @@ export function Projects() {
                       {project.host}
                     </p>
                   </div>
+
+                  {project.image ? (
+                    <div className="order-1 w-full overflow-hidden rounded-card border border-chalk/10 bg-void-2 md:order-2 md:w-[17rem] lg:w-[20rem]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.image}
+                        alt=""
+                        width={1600}
+                        height={1000}
+                        className="aspect-[16/10] w-full object-cover"
+                      />
+                    </div>
+                  ) : null}
                 </div>
               </li>
             );
@@ -166,7 +160,7 @@ export function Projects() {
         <div
           ref={plateRef}
           aria-hidden
-          className="pointer-events-none fixed left-0 top-0 z-30 h-[22rem] w-[16rem] overflow-hidden shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+          className="pointer-events-none fixed left-0 top-0 z-30 h-[15rem] w-[23rem] overflow-hidden rounded-card ring-1 ring-chalk/10 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
           style={{
             opacity: active === null ? 0 : 1,
             transform: 'translate3d(-100px,-100px,0) translate(-50%,-50%)',
@@ -174,7 +168,12 @@ export function Projects() {
         >
           {active !== null && (
             <div className="relative h-full w-full overflow-hidden">
-              <div className="absolute inset-0" style={plates[projects[active].plate]} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={projects[active].image}
+                alt=""
+                className="h-full w-full object-cover"
+              />
               <div className="grain absolute inset-0 opacity-[0.09] mix-blend-overlay" />
               <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.2em] text-chalk/70">
                 {projects[active].title}

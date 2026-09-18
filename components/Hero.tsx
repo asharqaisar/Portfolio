@@ -13,25 +13,27 @@ const socials = [
 export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden">
-      {/* one soft lime bloom — the only glow on the site */}
+      {/* ambient wash behind the portrait. Neutral, not lime: the user asked for
+          "just the profile pic and the rings", so nothing green sits near it. */}
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-[6%] h-[26rem] w-[26rem] -translate-x-1/2 rounded-full opacity-[0.10] blur-[110px] lg:left-auto lg:right-[4%] lg:top-[12%] lg:h-[42rem] lg:w-[42rem] lg:translate-x-0"
-        style={{ background: 'radial-gradient(circle, #aef33f 0%, rgba(174,243,63,0) 68%)' }}
+        style={{ background: 'radial-gradient(circle, #94a3b8 0%, rgba(148,163,184,0) 68%)' }}
       />
 
       <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-5 pb-16 pt-24 sm:px-8 md:gap-16 lg:min-h-[100svh] lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:px-10 lg:pb-28 lg:pt-32">
         {/*
           Portrait: first on mobile (it is the page's opening statement),
-          right-hand column from lg up. The 3D rings live in a canvas that
-          overhangs the circle by 45%, so they orbit it rather than hide behind it.
+          right-hand column from lg up. The canvas overhangs the circle by 45%
+          so the rings have room to orbit outside the photo.
         */}
         <div className="order-1 mx-auto w-[15rem] sm:w-[18rem] lg:order-2 lg:mx-0 lg:w-full lg:max-w-[23rem]">
           <div className="relative aspect-square">
-            <div className="absolute -inset-[45%]">
-              <HeroScene />
-            </div>
-
+            {/*
+              Base layer — a plain circular photo. This is what shows with no
+              WebGL, and it stays underneath as a guarantee that the portrait is
+              never missing: the 3D disc below is the same photo at the same size.
+            */}
             <div className="relative h-full w-full overflow-hidden rounded-full bg-void-2">
               {/*
                 Crop tuned for a circular frame: 52% across, 38% down. Chosen by sweeping
@@ -47,11 +49,16 @@ export function Hero() {
                 className="h-full w-full object-cover"
                 style={{ objectPosition: '52% 38%' }}
               />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-full"
-                style={{ boxShadow: 'inset 0 0 0 1px rgba(174,243,63,0.28)' }}
-              />
+            </div>
+
+            {/*
+              The scene sits ON TOP of the photo, not behind it. The portrait is
+              a textured disc inside the same 3D space as the rings, so the near
+              arc of a ring crosses in front and the far arc passes behind —
+              real occlusion instead of a stacked cutout.
+            */}
+            <div className="absolute -inset-[45%] z-10">
+              <HeroScene />
             </div>
           </div>
         </div>

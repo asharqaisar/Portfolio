@@ -34,7 +34,8 @@ Capabilities, all as stated on the CV: LLM deployment (Ollama, Open WebUI, NVIDI
 
 Constraints and open decisions:
 - **Every fact on the page must trace to the supplied CV.** No invented employers, dates, metrics, or client names. The single work history entry is "Freelance, Self-employed, 2019–Present" because that is what the CV says.
-- The CV supplies **no hard numbers** — no request volumes, latency figures, headcounts, or revenue. The page therefore leans on named tools and shipped URLs (asharfolio.vercel.app, kikuplayer.netlify.app) instead of invented metrics. If Ashar supplies real figures later, they belong in Experience.
+- **Kiku is listed but carries no image.** It stays on the site (the player is live at kikuplayer.netlify.app and is on the CV); only image generation for it was ruled out. Three projects: the agent framework portfolio, SPECTR, and Kiku.
+- The CV supplies **no hard numbers** — no request volumes, latency figures, headcounts, or revenue. The page therefore leans on named tools and the shipped URL (asharfolio.vercel.app) instead of invented metrics. If Ashar supplies real figures later, they belong in Experience.
 - **The portrait crop is computed, not eyeballed** (`object-position: 52% 38%`, hero only). It was chosen by sweeping 20/26/32/38/44% and measuring where skin pixels land — head top ~12-15%, face centred. Ashar should still confirm, since the agent has no vision. There is one photograph on the site: About is text-only, because the user found two portraits of the same photo repetitive.
 - The hero 3D object must degrade: static SVG rings with no WebGL, snapped pose under `prefers-reduced-motion`, and a paused render loop offscreen. It must be cheap on mobile first — most of this user's clients view on a phone.
 - `metadataBase` falls back to a placeholder domain until `NEXT_PUBLIC_SITE_URL` is set.
